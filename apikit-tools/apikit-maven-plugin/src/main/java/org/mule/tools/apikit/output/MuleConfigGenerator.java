@@ -17,11 +17,10 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-
 import org.mule.tools.apikit.output.deployer.MuleDeployWriter;
 import org.mule.tools.apikit.output.scopes.*;
-import org.mule.tools.apikit.output.scopes.FlowScope;
 import org.mule.tools.apikit.model.API;
+import org.raml.model.Action;
 
 import java.io.*;
 import java.util.HashMap;
@@ -46,11 +45,19 @@ public class MuleConfigGenerator {
             "http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
     );
 
+    public static final NamespaceWithLocation JSON_NAMESPACE = new NamespaceWithLocation(
+            Namespace.getNamespace("json", "http://www.mulesoft.org/schema/mule/json"),
+            "http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd"
+    );
+    
+    
     private static final String INDENTATION = "    ";
 
     private final List<GenerationModel> flowEntries;
     private final Log log;
     private final File rootDirectory;
+
+    private Map<String, Map<String, String>> commareaMappings; 
 
     public MuleConfigGenerator(Log log, File muleConfigOutputDirectory, List<GenerationModel> flowEntries) {
         this.log = log;
@@ -72,6 +79,18 @@ public class MuleConfigGenerator {
                 continue;
             }
 
+            //TODO MAPPING add mapping info
+            //flow name post:/zz90com1:application/json:gap1-config
+            Action flowAction = flowEntry.getAction();
+            String resourceUri = flowAction.getResource().getRelativeUri();
+            if ( resourceUri.startsWith("/")) {
+            	resourceUri = resourceUri.substring(1);
+            }
+            Map<String,String> programMappings = commareaMappings.get(resourceUri);
+            if ( programMappings != null ) {
+                flowEntry.setProgramMappings(programMappings);
+            }
+            
             // Generate each of the APIKit flows
             doc.getRootElement().addContent(new APIKitFlowScope(flowEntry).generate());
         }
@@ -140,5 +159,11 @@ public class MuleConfigGenerator {
         new FlowScope(mule, exceptionStrategy.getAttribute("name").getValue(),
                       api, configRef).generate();
     }
+
+	public void setCommareaMappings(
+			Map<String, Map<String, String>> commareaMappings) {
+		this.commareaMappings = commareaMappings;
+		
+	}
 
 }

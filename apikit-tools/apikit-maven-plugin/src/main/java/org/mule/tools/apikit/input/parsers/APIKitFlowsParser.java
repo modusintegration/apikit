@@ -35,7 +35,7 @@ public class APIKitFlowsParser implements MuleConfigFileParser {
     }
 
     @Override
-    public Set<ResourceActionMimeTypeTriplet> parse(Document document)  {
+    public Object parse(Document document)  {
         Set<ResourceActionMimeTypeTriplet> entries = new HashSet<ResourceActionMimeTypeTriplet>();
         XPathExpression<Element> xp = XPathFactory.instance().compile("//*/*[local-name()='flow']",
                                                                       Filters.element(XMLNS_NAMESPACE.getNamespace()));

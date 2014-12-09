@@ -27,6 +27,9 @@ public class GenerationModel implements Comparable<GenerationModel> {
     private String mimeType;
     private List<String> splitPath;
     private API api;
+    
+    private Map<String, String> programMappings; 
+    
 
     public GenerationModel(API api, Resource resource, Action action) { this(api, resource, action, null); }
 
@@ -192,4 +195,22 @@ public class GenerationModel implements Comparable<GenerationModel> {
     public int compareTo(GenerationModel generationModel) {
         return this.getName().compareTo(generationModel.getName());
     }
+
+    /**
+     * 
+     * @return
+     */
+	public Action getAction() {
+		return action;
+	}
+
+	public void setProgramMappings(Map<String, String> programMappings) {
+		this.programMappings = programMappings;
+	}
+
+	public Map<String, String> getProgramMappings() {
+		return programMappings;
+	}
+	
+	
 }

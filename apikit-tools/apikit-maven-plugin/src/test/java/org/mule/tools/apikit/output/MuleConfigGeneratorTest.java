@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -48,13 +49,16 @@ public class MuleConfigGeneratorTest {
         Resource resource = mock(Resource.class);
 
         when(resource.getUri()).thenReturn("/api/pet");
+        when(resource.getRelativeUri()).thenReturn("/pet");
 
         Action action = mock(Action.class);
+        when(action.getResource()).thenReturn(resource);
 
         when(action.getType()).thenReturn(ActionType.GET);
 
         Action postAction = mock(Action.class);
 
+        when(postAction.getResource()).thenReturn(resource);
         when(postAction.getType()).thenReturn(ActionType.POST);
 
         API api = mock(API.class);
@@ -71,8 +75,17 @@ public class MuleConfigGeneratorTest {
                 new GenerationModel(api, resource, postAction)));
 
 
+        Map<String, Map<String, String>> commareaMappings = new HashMap<String, Map<String, String>>();
+        Map<String, String> programProperties = new HashMap<String, String>();
+        programProperties.put("AbstractJavaTransformer", "com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer");
+        programProperties.put("JSON to Object", "com.gap.cobol.zz90com1.CaZz90PgmCommarea");
+        commareaMappings.put("pet", programProperties);
+
         Log mock = mock(Log.class);
         MuleConfigGenerator muleConfigGenerator = new MuleConfigGenerator(mock, new File(""), entries);
+        muleConfigGenerator.setCommareaMappings(commareaMappings);
+        
+        
         muleConfigGenerator.generate();
 
         assertTrue(file.exists());

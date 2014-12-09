@@ -52,9 +52,9 @@ public class MuleConfigParser {
         SAXBuilder saxBuilder = new SAXBuilder(XMLReaders.NONVALIDATING);
         Document document = saxBuilder.build(stream);
 
-        apikitConfigs = new APIKitConfigParser().parse(document);
-        includedApis = new APIKitRoutersParser(apikitConfigs, yamlPaths, file, apiFactory).parse(document);
-        entries = new APIKitFlowsParser(includedApis).parse(document);
+        apikitConfigs = (Map<String, APIKitConfig>) new APIKitConfigParser().parse(document);
+        includedApis = (Map<String, API>) new APIKitRoutersParser(apikitConfigs, yamlPaths, file, apiFactory).parse(document);
+        entries = (Set<ResourceActionMimeTypeTriplet>) new APIKitFlowsParser(includedApis).parse(document);
     }
 
     public Map<String, APIKitConfig> getApikitConfigs() {

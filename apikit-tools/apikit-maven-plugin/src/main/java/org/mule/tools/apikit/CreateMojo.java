@@ -100,8 +100,16 @@ public class CreateMojo
 
         log.info("Processing the following RAML files: " + specFiles);
         log.info("Processing the following xml files as mule configs: " + muleXmlFiles);
-
+        
+        //TODO MAPPING Read mapping info from parameters and send them to the new Scaffolder
+        Map<String, Map<String, String>> commareaMappings = new HashMap<String, Map<String, String>>();
+        Map<String, String> programProperties = new HashMap<String, String>();
+        programProperties.put("AbstractJavaTransformer", "com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer");
+        programProperties.put("JSON to Object", "com.gap.cobol.zz90com1.CaZz90PgmCommarea");
+        commareaMappings.put("zz90com1", programProperties);
+        
         Scaffolder scaffolder = Scaffolder.createScaffolder(log, muleXmlOutputDirectory, specFiles, muleXmlFiles);
+        scaffolder.setCommareaMappings(commareaMappings);
         scaffolder.run();
     }
 

@@ -24,7 +24,7 @@ import org.jdom2.xpath.XPathFactory;
 public class APIKitConfigParser implements MuleConfigFileParser {
 
     @Override
-    public Map<String, APIKitConfig> parse(Document document)   {
+    public Object parse(Document document)   {
         Map<String, APIKitConfig> apikitConfigs = new HashMap<String, APIKitConfig>();
         XPathExpression<Element> xp = XPathFactory.instance().compile("//*/*[local-name()='" + APIKitConfig.ELEMENT_NAME + "']",
                                                                       Filters.element(APIKitTools.API_KIT_NAMESPACE.getNamespace()));

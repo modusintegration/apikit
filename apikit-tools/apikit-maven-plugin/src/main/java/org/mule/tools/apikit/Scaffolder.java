@@ -8,7 +8,6 @@ package org.mule.tools.apikit;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
-
 import org.mule.tools.apikit.model.APIFactory;
 import org.mule.tools.apikit.output.GenerationModel;
 import org.mule.tools.apikit.output.GenerationStrategy;
@@ -23,6 +22,8 @@ import java.util.*;
 
 public class Scaffolder {
     private final MuleConfigGenerator muleConfigGenerator;
+    
+    private Map<String, Map<String, String>> commareaMappings; 
 
     public static Scaffolder createScaffolder(Log log, File muleXmlOutputDirectory,
                                    List<String> specFiles, List<String> muleXmlFiles)
@@ -42,11 +43,17 @@ public class Scaffolder {
         MuleConfigParser muleConfigParser = new MuleConfigParser(log, yamls.keySet(), xmls, apiFactory);
         List<GenerationModel> generationModels = new GenerationStrategy(log).generate(RAMLFilesParser, muleConfigParser);
         muleConfigGenerator = new MuleConfigGenerator(log, muleXmlOutputDirectory, generationModels);
+        muleConfigGenerator.setCommareaMappings(commareaMappings);
     }
 
     public void run() {
         muleConfigGenerator.generate();
     }
+
+	public void setCommareaMappings(
+			Map<String, Map<String, String>> commareaMappings) {
+		this.commareaMappings = commareaMappings;
+	}
 
 
 }

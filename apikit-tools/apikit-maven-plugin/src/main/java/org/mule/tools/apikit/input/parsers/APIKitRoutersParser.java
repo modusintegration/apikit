@@ -43,7 +43,7 @@ public class APIKitRoutersParser implements MuleConfigFileParser {
     }
 
     @Override
-    public Map<String, API> parse(Document document) {
+    public Object parse(Document document) {
         Map<String, API> includedApis = new HashMap<String, API>();
 
         XPathExpression<Element> xp = XPathFactory.instance().compile("//*/*[local-name()='router']",
