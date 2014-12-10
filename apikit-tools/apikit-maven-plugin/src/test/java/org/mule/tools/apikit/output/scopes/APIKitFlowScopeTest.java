@@ -40,7 +40,6 @@ public class APIKitFlowScopeTest {
                 "name='get:/pet'><set-payload " +
                 "value='Hello world!' /></flow>", s);
 
-        //FIXME MAPPING fix test, it's generating a new mapping now
-        //assertTrue(diff.toString(), diff.similar());
+        assertTrue(diff.toString(), diff.similar());
     }
 }

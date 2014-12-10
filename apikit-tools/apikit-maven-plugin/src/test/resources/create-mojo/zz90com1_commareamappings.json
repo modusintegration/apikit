@@ -1,0 +1,8 @@
+{"mappings":[
+		{
+			"name" : "zz90com1",
+			"abstractJavaTransformer" : "com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer",
+			"jsonToObjectReturn" : "com.gap.cobol.zz90com1.CaZz90PgmCommarea"
+		}
+	]
+}

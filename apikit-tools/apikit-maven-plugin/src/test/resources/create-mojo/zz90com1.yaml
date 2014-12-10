@@ -1,0 +1,14 @@
+#%RAML 0.8
+---
+title: Sample API
+version: v1
+baseUri: http://localhost/api
+/zz90com1:
+    displayName: ZZ90COM1
+    post:
+        responses:
+            200:
+                body:
+                    application/json: !!null
+                    application/xml: !!null
+                    text/plain: !!null

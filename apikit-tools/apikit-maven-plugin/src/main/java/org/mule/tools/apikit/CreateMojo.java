@@ -9,13 +9,16 @@ package org.mule.tools.apikit;
 import org.apache.commons.lang.Validate;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.Scanner;
+import org.mule.tools.apikit.commarea.CommareaMappings;
 import org.sonatype.plexus.build.incremental.BuildContext;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.*;
 import java.util.*;
@@ -71,6 +74,12 @@ public class CreateMojo
     @Parameter(defaultValue = "${basedir}/src/main/app")
     private File muleXmlOutputDirectory;
 
+    /**
+     * commarea mappings settings.
+     */
+    @Parameter(defaultValue = "${basedir}/src/main/resources/commareamappings.json")
+    private File commareaMappingsSrc;
+
     private Log log;
 
     List<String> getIncludedFiles(File sourceDirectory, String[] includes, String[] excludes) {
@@ -101,16 +110,19 @@ public class CreateMojo
         log.info("Processing the following RAML files: " + specFiles);
         log.info("Processing the following xml files as mule configs: " + muleXmlFiles);
         
-        //TODO MAPPING Read mapping info from parameters and send them to the new Scaffolder
-        Map<String, Map<String, String>> commareaMappings = new HashMap<String, Map<String, String>>();
-        Map<String, String> programProperties = new HashMap<String, String>();
-        programProperties.put("AbstractJavaTransformer", "com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer");
-        programProperties.put("JSON to Object", "com.gap.cobol.zz90com1.CaZz90PgmCommarea");
-        commareaMappings.put("zz90com1", programProperties);
         
         Scaffolder scaffolder = Scaffolder.createScaffolder(log, muleXmlOutputDirectory, specFiles, muleXmlFiles);
+        CommareaMappings commareaMappings = parseCommareaMappings();
         scaffolder.setCommareaMappings(commareaMappings);
         scaffolder.run();
     }
+
+	private CommareaMappings parseCommareaMappings() throws MojoExecutionException{
+		try {
+			return CommareaMappings.fromFile(commareaMappingsSrc);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Exception while parsing commarea mappings file", e);
+		}
+	}
 
 }

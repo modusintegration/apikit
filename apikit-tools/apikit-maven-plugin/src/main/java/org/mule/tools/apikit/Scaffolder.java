@@ -13,6 +13,7 @@ import org.mule.tools.apikit.output.GenerationModel;
 import org.mule.tools.apikit.output.GenerationStrategy;
 import org.mule.tools.apikit.output.MuleConfigGenerator;
 import org.mule.tools.apikit.misc.FileListUtils;
+import org.mule.tools.apikit.commarea.CommareaMappings;
 import org.mule.tools.apikit.input.MuleConfigParser;
 import org.mule.tools.apikit.input.RAMLFilesParser;
 
@@ -23,7 +24,7 @@ import java.util.*;
 public class Scaffolder {
     private final MuleConfigGenerator muleConfigGenerator;
     
-    private Map<String, Map<String, String>> commareaMappings; 
+    private CommareaMappings commareaMappings; 
 
     public static Scaffolder createScaffolder(Log log, File muleXmlOutputDirectory,
                                    List<String> specFiles, List<String> muleXmlFiles)
@@ -51,8 +52,10 @@ public class Scaffolder {
     }
 
 	public void setCommareaMappings(
-			Map<String, Map<String, String>> commareaMappings) {
+			CommareaMappings commareaMappings) {
 		this.commareaMappings = commareaMappings;
+        muleConfigGenerator.setCommareaMappings(commareaMappings);
+		
 	}
 
 

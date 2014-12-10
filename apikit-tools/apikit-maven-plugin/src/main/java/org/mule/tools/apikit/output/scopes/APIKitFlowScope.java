@@ -28,13 +28,12 @@ public class APIKitFlowScope implements Scope {
             flow.addContent(setContentType);
         }
 
-        if ( flowEntry.getProgramMappings() != null ) {
-            //TODO MAPPING add mapping elements
+        if ( flowEntry.getProgramMapping() != null ) {
         	
 //          <json:json-to-object-transformer doc:name="JSON to Object" returnClass="com.gap.cobol.zz90com1.CaZz90PgmCommarea"/>
             
             Element jto = new Element("json-to-object-transformer", JSON_NAMESPACE.getNamespace());
-            String className = flowEntry.getProgramMappings().get("JSON to Object");
+            String className = flowEntry.getProgramMapping().getJsonToObjectReturn();
             if ( className == null ) {
             	className = "java.lang.Object";
             }
@@ -50,7 +49,7 @@ public class APIKitFlowScope implements Scope {
 
 //                <add-message-property key="AbstractJavaTransformer" value="com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer"/>
             Element amp = new Element("add-message-property");
-            String javaTransformerName = flowEntry.getProgramMappings().get("AbstractJavaTransformer");
+            String javaTransformerName = flowEntry.getProgramMapping().getAbstractJavaTransformer();
             if ( javaTransformerName == null ) {
             	javaTransformerName = "**TBD**";
             }

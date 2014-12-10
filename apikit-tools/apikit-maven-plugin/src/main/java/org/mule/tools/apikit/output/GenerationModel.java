@@ -8,6 +8,7 @@ package org.mule.tools.apikit.output;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.mule.tools.apikit.commarea.ProgramMapping;
 import org.mule.tools.apikit.model.API;
 import org.raml.model.*;
 
@@ -28,7 +29,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
     private List<String> splitPath;
     private API api;
     
-    private Map<String, String> programMappings; 
+    private ProgramMapping programMapping; 
     
 
     public GenerationModel(API api, Resource resource, Action action) { this(api, resource, action, null); }
@@ -204,13 +205,13 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		return action;
 	}
 
-	public void setProgramMappings(Map<String, String> programMappings) {
-		this.programMappings = programMappings;
+	public ProgramMapping getProgramMapping() {
+		return programMapping;
 	}
 
-	public Map<String, String> getProgramMappings() {
-		return programMappings;
+	public void setProgramMapping(ProgramMapping programMapping) {
+		this.programMapping = programMapping;
 	}
-	
+
 	
 }

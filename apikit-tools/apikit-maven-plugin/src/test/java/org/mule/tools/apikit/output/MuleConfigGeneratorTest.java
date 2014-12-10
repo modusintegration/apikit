@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mule.tools.apikit.Helper;
 import org.mule.tools.apikit.output.scopes.APIKitFlowScope;
+import org.mule.tools.apikit.commarea.CommareaMappings;
+import org.mule.tools.apikit.commarea.ProgramMapping;
 import org.mule.tools.apikit.model.API;
 import org.raml.model.Action;
 import org.raml.model.ActionType;
@@ -75,11 +77,13 @@ public class MuleConfigGeneratorTest {
                 new GenerationModel(api, resource, postAction)));
 
 
-        Map<String, Map<String, String>> commareaMappings = new HashMap<String, Map<String, String>>();
-        Map<String, String> programProperties = new HashMap<String, String>();
-        programProperties.put("AbstractJavaTransformer", "com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer");
-        programProperties.put("JSON to Object", "com.gap.cobol.zz90com1.CaZz90PgmCommarea");
-        commareaMappings.put("pet", programProperties);
+        CommareaMappings commareaMappings = new CommareaMappings();
+        
+        ProgramMapping programMapping = new ProgramMapping();
+        programMapping.setAbstractJavaTransformer("com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer");
+        programMapping.setJsonToObjectReturn("com.gap.cobol.zz90com1.CaZz90PgmCommarea");
+        programMapping.setName("pet");
+        commareaMappings.addProgramMapping(programMapping);
 
         Log mock = mock(Log.class);
         MuleConfigGenerator muleConfigGenerator = new MuleConfigGenerator(mock, new File(""), entries);
@@ -117,8 +121,7 @@ public class MuleConfigGeneratorTest {
                 "<set-payload " +
                 "value='{\"name\": \"John\", \"kind\": \"dog\"}' /></flow>", s);
 
-        //FIXME MAPPING fix test
-//        assertTrue(diff.toString(), diff.similar());
+        assertTrue(diff.toString(), diff.similar());
     }
 
     @Test

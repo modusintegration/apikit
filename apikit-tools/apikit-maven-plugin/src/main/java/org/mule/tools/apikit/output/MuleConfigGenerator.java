@@ -19,6 +19,8 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mule.tools.apikit.output.deployer.MuleDeployWriter;
 import org.mule.tools.apikit.output.scopes.*;
+import org.mule.tools.apikit.commarea.CommareaMappings;
+import org.mule.tools.apikit.commarea.ProgramMapping;
 import org.mule.tools.apikit.model.API;
 import org.raml.model.Action;
 
@@ -57,7 +59,7 @@ public class MuleConfigGenerator {
     private final Log log;
     private final File rootDirectory;
 
-    private Map<String, Map<String, String>> commareaMappings; 
+    private CommareaMappings commareaMappings; 
 
     public MuleConfigGenerator(Log log, File muleConfigOutputDirectory, List<GenerationModel> flowEntries) {
         this.log = log;
@@ -79,17 +81,15 @@ public class MuleConfigGenerator {
                 continue;
             }
 
-            //TODO MAPPING add mapping info
-            //flow name post:/zz90com1:application/json:gap1-config
             Action flowAction = flowEntry.getAction();
             String resourceUri = flowAction.getResource().getRelativeUri();
             if ( resourceUri.startsWith("/")) {
             	resourceUri = resourceUri.substring(1);
             }
             if ( commareaMappings != null ) {
-                Map<String,String> programMappings = commareaMappings.get(resourceUri);
-                if ( programMappings != null ) {
-                    flowEntry.setProgramMappings(programMappings);
+                ProgramMapping programMapping = commareaMappings.getProgramMappings(resourceUri);
+                if ( programMapping != null ) {
+                    flowEntry.setProgramMapping(programMapping);
                 }
             }
             
@@ -163,7 +163,7 @@ public class MuleConfigGenerator {
     }
 
 	public void setCommareaMappings(
-			Map<String, Map<String, String>> commareaMappings) {
+			CommareaMappings commareaMappings) {
 		this.commareaMappings = commareaMappings;
 		
 	}
