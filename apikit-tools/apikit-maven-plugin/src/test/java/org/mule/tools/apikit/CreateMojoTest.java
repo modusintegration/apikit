@@ -161,7 +161,7 @@ public class CreateMojoTest extends AbstractMojoTestCase {
         Diff diff = XMLUnit.compareXML("<flow name=\"post:/zz90com1:hello-config\">\n"
         		+ "    <json:json-to-object-transformer xmlns:json=\"http://www.mulesoft.org/schema/mule/json\" returnClass=\"com.gap.cobol.zz90com1.CaZz90PgmCommarea\" />\n"
         		+ "    <message-properties-transformer xmlns=\"\" name=\"Message Properties\">\n"
-        		+ "        <add-message-property AbstractJavaTransformer=\"com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer\" />\n"
+        		+ "        <add-message-property key=\"AbstractJavaTransformer\" value=\"com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer\" />\n"
         		+ "    </message-properties-transformer>\n"
         		+ "</flow>\n", flowXml);
 

@@ -53,7 +53,8 @@ public class APIKitFlowScope implements Scope {
             if ( javaTransformerName == null ) {
             	javaTransformerName = "**TBD**";
             }
-            amp.setAttribute("AbstractJavaTransformer", javaTransformerName);
+            amp.setAttribute("key", "AbstractJavaTransformer");
+            amp.setAttribute("value", javaTransformerName);
             mpt.addContent(amp);
             
 //            </message-properties-transformer>
