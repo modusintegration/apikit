@@ -86,9 +86,11 @@ public class MuleConfigGenerator {
             if ( resourceUri.startsWith("/")) {
             	resourceUri = resourceUri.substring(1);
             }
-            Map<String,String> programMappings = commareaMappings.get(resourceUri);
-            if ( programMappings != null ) {
-                flowEntry.setProgramMappings(programMappings);
+            if ( commareaMappings != null ) {
+                Map<String,String> programMappings = commareaMappings.get(resourceUri);
+                if ( programMappings != null ) {
+                    flowEntry.setProgramMappings(programMappings);
+                }
             }
             
             // Generate each of the APIKit flows

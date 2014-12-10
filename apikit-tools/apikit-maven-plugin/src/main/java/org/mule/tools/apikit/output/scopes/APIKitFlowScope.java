@@ -28,42 +28,54 @@ public class APIKitFlowScope implements Scope {
             flow.addContent(setContentType);
         }
 
-        //TODO MAPPING add mapping elements
-//        Element example = new Element("set-payload", XMLNS_NAMESPACE.getNamespace());
-//        example.setAttribute("value", flowEntry.getExample().trim());
-        
-//        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="com.gap.cobol.zz90com1.CaZz90PgmCommarea"/>
-        
-        Element jto = new Element("json-to-object-transformer", JSON_NAMESPACE.getNamespace());
-        jto.setAttribute("returnClass", flowEntry.getProgramMappings().get("JSON to Object"));
-        flow.addContent(jto);
+        if ( flowEntry.getProgramMappings() != null ) {
+            //TODO MAPPING add mapping elements
+        	
+//          <json:json-to-object-transformer doc:name="JSON to Object" returnClass="com.gap.cobol.zz90com1.CaZz90PgmCommarea"/>
+            
+            Element jto = new Element("json-to-object-transformer", JSON_NAMESPACE.getNamespace());
+            String className = flowEntry.getProgramMappings().get("JSON to Object");
+            if ( className == null ) {
+            	className = "java.lang.Object";
+            }
+            jto.setAttribute("returnClass", className);
+            flow.addContent(jto);
 
-//        <message-properties-transformer doc:name="Message Properties">
-        //FIXME  MAPPING check doc:name namespace
+//            <message-properties-transformer doc:name="Message Properties">
+            //FIXME  MAPPING check doc:name namespace
 
-        Element mpt = new Element("message-properties-transformer");
-        mpt.setAttribute("name", "Message Properties");
-        flow.addContent(mpt);
+            Element mpt = new Element("message-properties-transformer");
+            mpt.setAttribute("name", "Message Properties");
+            flow.addContent(mpt);
 
-//            <add-message-property key="AbstractJavaTransformer" value="com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer"/>
-        Element amp = new Element("add-message-property");
-        amp.setAttribute("AbstractJavaTransformer", flowEntry.getProgramMappings().get("AbstractJavaTransformer"));
-        mpt.addContent(amp);
-        
-//        </message-properties-transformer>
+//                <add-message-property key="AbstractJavaTransformer" value="com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer"/>
+            Element amp = new Element("add-message-property");
+            String javaTransformerName = flowEntry.getProgramMappings().get("AbstractJavaTransformer");
+            if ( javaTransformerName == null ) {
+            	javaTransformerName = "**TBD**";
+            }
+            amp.setAttribute("AbstractJavaTransformer", javaTransformerName);
+            mpt.addContent(amp);
+            
+//            </message-properties-transformer>
 
-        //bla bla bla
-        //FIXME MAPPING add these too
-        /*
-        <component class="com.gap.seamless.transformers.CommareaToByteArray" doc:name="Commarea to Byte Array"/>
-        <response>
-            <json:object-to-json-transformer doc:name="Object to JSON"/>
-        </response>
-        <response>
-            <component class="com.gap.seamless.transformers.ByteArrayToCommarea" doc:name="ByteArray to Commarea"/>
-        </response>
-        <unikix:invoke-cics-program config-ref="Unikix" doc:name="Unikix"/>
-        */
+            //bla bla bla
+            //FIXME MAPPING add these too
+            /*
+            <component class="com.gap.seamless.transformers.CommareaToByteArray" doc:name="Commarea to Byte Array"/>
+            <response>
+                <json:object-to-json-transformer doc:name="Object to JSON"/>
+            </response>
+            <response>
+                <component class="com.gap.seamless.transformers.ByteArrayToCommarea" doc:name="ByteArray to Commarea"/>
+            </response>
+            <unikix:invoke-cics-program config-ref="Unikix" doc:name="Unikix"/>
+            */
+        } else {
+          Element example = new Element("set-payload", XMLNS_NAMESPACE.getNamespace());
+          example.setAttribute("value", flowEntry.getExample().trim());
+          flow.addContent(example);
+        }
         
     }
 
