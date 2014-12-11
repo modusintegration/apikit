@@ -52,6 +52,19 @@ public class MuleConfigGenerator {
             "http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd"
     );
     
+    public static final NamespaceWithLocation DOC_NAMESPACE = new NamespaceWithLocation(
+            Namespace.getNamespace("doc", "http://www.mulesoft.org/schema/mule/documentation"),
+            null
+    );
+    
+    public static final NamespaceWithLocation UNIKIX_NAMESPACE = new NamespaceWithLocation(
+            Namespace.getNamespace("unikix", "http://www.mulesoft.org/schema/mule/unikix"),
+            "http://www.mulesoft.org/schema/mule/unikix/current/mule-unikix.xsd"
+    );
+
+     
+    	
+    	
     
     private static final String INDENTATION = "    ";
 

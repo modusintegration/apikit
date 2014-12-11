@@ -4,11 +4,19 @@ title: Sample API
 version: v1
 baseUri: http://localhost/api
 /zz90com1:
-    displayName: ZZ90COM1
-    post:
-        responses:
-            200:
-                body:
-                    application/json: !!null
-                    application/xml: !!null
-                    text/plain: !!null
+  post:
+    description: Calls zz90com1 program with full payload
+    headers:
+          programName:
+            displayName: Program Name
+            type: string
+            required: false
+            minLength: 1
+            maxLength: 30 # maybe 8? check spec
+            default: ZZ90COM1
+    responses:
+        200:
+            body:
+                application/json: !!null
+                application/xml: !!null
+                text/plain: !!null
