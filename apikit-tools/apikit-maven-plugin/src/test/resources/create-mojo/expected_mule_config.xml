@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:unikix="http://www.mulesoft.org/schema/mule/unikix" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd http://www.mulesoft.org/schema/mule/unikix http://www.mulesoft.org/schema/mule/unikix/current/mule-unikix.xsd ">
+    <apikit:config name="hello-config" raml="hello.yaml" consoleEnabled="true" consolePath="console" />
+    <apikit:mapping-exception-strategy name="hello-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" />
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+    <flow name="hello-main">
+        <http:inbound-endpoint address="http://localhost:8081/api" />
+        <apikit:router config-ref="hello-config" />
+        <exception-strategy ref="hello-apiKitGlobalExceptionMapping" />
+    </flow>
+    <flow name="post:/zz90com1:hello-config">
+        <json:json-to-object-transformer returnClass="com.gap.cobol.zz90com1.CaZz90PgmCommarea" />
+        <message-properties-transformer doc:name="Message Properties">
+            <add-message-property key="AbstractJavaTransformer" value="com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer" />
+        </message-properties-transformer>
+        <component class="com.gap.seamless.transformers.CommareaToByteArray" doc:name="Commarea to Byte Array" />
+        <response>
+            <json:object-to-json-transformer doc:name="Object to JSON" />
+        </response>
+        <response>
+            <component class="com.gap.seamless.transformers.ByteArrayToCommarea" doc:name="ByteArray to Commarea" />
+        </response>
+        <unikix:invoke-cics-program config-ref="Unikix" doc:name="Unikix" programname="ZZ90COM1" />
+    </flow>
+</mule>

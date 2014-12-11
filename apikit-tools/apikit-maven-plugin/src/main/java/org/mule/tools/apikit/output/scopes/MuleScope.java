@@ -18,6 +18,9 @@ import static org.mule.tools.apikit.output.MuleConfigGenerator.XMLNS_NAMESPACE;
 import static org.mule.tools.apikit.output.MuleConfigGenerator.HTTP_NAMESPACE;
 import static org.mule.tools.apikit.output.MuleConfigGenerator.SPRING_NAMESPACE;
 import static org.mule.tools.apikit.output.MuleConfigGenerator.XSI_NAMESPACE;
+import static org.mule.tools.apikit.output.MuleConfigGenerator.JSON_NAMESPACE;
+import static org.mule.tools.apikit.output.MuleConfigGenerator.DOC_NAMESPACE;
+import static org.mule.tools.apikit.output.MuleConfigGenerator.UNIKIX_NAMESPACE;
 
 public class MuleScope implements Scope {
     private final Element mule;
@@ -39,7 +42,12 @@ public class MuleScope implements Scope {
         addLocationEntry(stringBuilder, XMLNS_NAMESPACE);
 
         List<NamespaceWithLocation> namespaces = Arrays.asList(HTTP_NAMESPACE,
-                APIKitTools.API_KIT_NAMESPACE, SPRING_NAMESPACE);
+                APIKitTools.API_KIT_NAMESPACE, SPRING_NAMESPACE,
+                //Added to support unikix flows
+                JSON_NAMESPACE, UNIKIX_NAMESPACE);
+
+        //Added to support unikix flows, it doesn't have a location so it goes here
+        mule.addNamespaceDeclaration(DOC_NAMESPACE.getNamespace());
 
         mule.addNamespaceDeclaration(XSI_NAMESPACE.getNamespace());
 

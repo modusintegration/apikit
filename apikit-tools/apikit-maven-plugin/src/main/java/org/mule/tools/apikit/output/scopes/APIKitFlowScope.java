@@ -44,11 +44,11 @@ public class APIKitFlowScope implements Scope {
 
 //          <message-properties-transformer doc:name="Message Properties">
 
-            Element mpt = new Element("message-properties-transformer");
+            Element mpt = new Element("message-properties-transformer", XMLNS_NAMESPACE.getNamespace());
             mpt.setAttribute("name", "Message Properties", DOC_NAMESPACE.getNamespace());
 
 //            <add-message-property key="AbstractJavaTransformer" value="com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer"/>
-            Element amp = new Element("add-message-property");
+            Element amp = new Element("add-message-property", XMLNS_NAMESPACE.getNamespace());
             String javaTransformerName = flowEntry.getProgramMapping().getAbstractJavaTransformer();
             if ( javaTransformerName == null ) {
             	javaTransformerName = "**TBD**";
@@ -61,14 +61,14 @@ public class APIKitFlowScope implements Scope {
             flow.addContent(mpt);
 
 //            <component class="com.gap.seamless.transformers.CommareaToByteArray" doc:name="Commarea to Byte Array"/>
-            Element comp = new Element("component");
+            Element comp = new Element("component", XMLNS_NAMESPACE.getNamespace());
             comp.setAttribute("class", "com.gap.seamless.transformers.CommareaToByteArray");
             comp.setAttribute("name", "Commarea to Byte Array", DOC_NAMESPACE.getNamespace());
             flow.addContent(comp);
             
             
 //            <response>
-            Element response1 = new Element("response");
+            Element response1 = new Element("response", XMLNS_NAMESPACE.getNamespace());
             
 //        	<json:object-to-json-transformer doc:name="Object to JSON"/>
             Element otjt = new Element("object-to-json-transformer", JSON_NAMESPACE.getNamespace());
@@ -80,10 +80,10 @@ public class APIKitFlowScope implements Scope {
             
 
 //          <response>
-			Element response2 = new Element("response");
+			Element response2 = new Element("response", XMLNS_NAMESPACE.getNamespace());
 			  
 			//   <component class="com.gap.seamless.transformers.ByteArrayToCommarea" doc:name="ByteArray to Commarea"/>
-			Element comp2 = new Element("component");
+			Element comp2 = new Element("component", XMLNS_NAMESPACE.getNamespace());
 			comp2.setAttribute("class", "com.gap.seamless.transformers.ByteArrayToCommarea");
 			comp2.setAttribute("name", "ByteArray to Commarea", DOC_NAMESPACE.getNamespace());
 			response2.addContent(comp2);

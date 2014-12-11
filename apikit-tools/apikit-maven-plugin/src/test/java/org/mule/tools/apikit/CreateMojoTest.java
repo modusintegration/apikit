@@ -154,43 +154,12 @@ public class CreateMojoTest extends AbstractMojoTestCase {
         
         assertTrue(generated.length() > 0);
         
-        //TODO MAPPING not nice
-        String flowXml = generated.substring(generated.indexOf("<flow name=\"post:/zz90com1:hello-config\">"), generated.indexOf("</mule>") ).trim();
+        System.out.println(generated);
         
+        String expected = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("create-mojo/expected_mule_config.xml"));
+                
         XMLUnit.setIgnoreWhitespace(true);
-        String controlXml = "<flow name=\"post:/zz90com1:hello-config\">\n"
-        		+ "    <json:json-to-object-transformer xmlns:json=\"http://www.mulesoft.org/schema/mule/json\" returnClass=\"com.gap.cobol.zz90com1.CaZz90PgmCommarea\" />\n"
-        		+ "    <message-properties-transformer xmlns=\"\" xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\" doc:name=\"Message Properties\">\n"
-        		+ "        <add-message-property key=\"AbstractJavaTransformer\" value=\"com.gap.cobol.zz90com1.bind.CaZz90PgmCommareaJavaToHostTransformer\" />\n"
-        		+ "    </message-properties-transformer>\n"
-        		+ "        <component xmlns=\"\" xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\" class=\"com.gap.seamless.transformers.CommareaToByteArray\" doc:name=\"Commarea to Byte Array\"/>\n"
-        		+ "<response xmlns=\"\">\n"
-        		+ "<json:object-to-json-transformer xmlns:json=\"http://www.mulesoft.org/schema/mule/json\" xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\" doc:name=\"Object to JSON\"/>\n"
-        		+ "</response>\n"
-        		+ "<response xmlns=\"\">\n"
-        		+ "<component xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\" class=\"com.gap.seamless.transformers.ByteArrayToCommarea\" doc:name=\"ByteArray to Commarea\"/>\n"
-        		+ "</response>\n"
-        		+ "<unikix:invoke-cics-program xmlns:unikix=\"http://www.mulesoft.org/schema/mule/unikix\" xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\" config-ref=\"Unikix\" doc:name=\"Unikix\" programname=\"ZZ90COM1\"/>\n"
-        		+ "</flow>\n";
-        
-        String commonHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
- + "<mule xmlns:tracking=\"http://www.mulesoft.org/schema/mule/ee/tracking\" xmlns:json=\"http://www.mulesoft.org/schema/mule/json\"\n"
- + "	xmlns:mulexml=\"http://www.mulesoft.org/schema/mule/xml\"\n"
- + "	xmlns:data-mapper=\"http://www.mulesoft.org/schema/mule/ee/data-mapper\" xmlns:scripting=\"http://www.mulesoft.org/schema/mule/scripting\" xmlns:http=\"http://www.mulesoft.org/schema/mule/http\" xmlns:unikix=\"http://www.mulesoft.org/schema/mule/unikix\" xmlns=\"http://www.mulesoft.org/schema/mule/core\" xmlns:doc=\"http://www.mulesoft.org/schema/mule/documentation\"\n"
- + "	xmlns:spring=\"http://www.springframework.org/schema/beans\" version=\"EE-3.5.2\"\n"
- + "	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
- + "	xsi:schemaLocation=\"http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd\n"
- + "http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd\n"
- + "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd\n"
- + "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd\n"
- + "http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd\n"
- + "http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd\n"
- + "http://www.mulesoft.org/schema/mule/unikix http://www.mulesoft.org/schema/mule/unikix/current/mule-unikix.xsd\n"
- + "http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd\n"
- + "http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd\">\n"
- + "";
-        String commonSuffix = "</mule>";
-        Diff diff = XMLUnit.compareXML(commonHeader+controlXml+commonSuffix, commonHeader+flowXml+commonSuffix);
+        Diff diff = XMLUnit.compareXML(expected, generated);
 
         assertTrue(diff.toString(), diff.similar());
         
